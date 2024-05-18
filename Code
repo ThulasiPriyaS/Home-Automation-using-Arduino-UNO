@@ -1,0 +1,82 @@
+const int lm35_pin = A0;
+int temp_int = 69;
+int threshold_temperature = 30;
+void setup() {
+Serial.begin(9600);
+pinMode(4, OUTPUT);
+pinMode(2, OUTPUT);
+}
+void loop() {
+float sensor_value = analogRead(lm35_pin); // read the sensor value
+float voltage = sensor_value * (5.0 / 1023.0); // convert the sensor value to voltage
+float temperature = (voltage) * 100.0; // convert the voltage to temperature
+temp_int = temperature + 0.5;
+Serial.println(temperature); // print the temperature to the serial port
+if (temperature > threshold_temperature){
+digitalWrite(4, HIGH);
+}
+
+else
+{
+digitalWrite(4, LOW);
+}
+// reads the input on analog pin A0 (value between 0 and 1023)
+int analogValue = analogRead(A0);
+Serial.print("Analog reading: ");
+Serial.print(analogValue); // the raw analog reading
+if (analogValue < 80) {
+Serial.println(" - Dark");
+digitalWrite(2, HIGH);
+} else if (analogValue < 200) {
+Serial.println(" - Dim");
+digitalWrite(2, LOW);
+} else if (analogValue < 500) {
+Serial.println(" - Light");
+digitalWrite(2, LOW);
+} else if (analogValue < 800) {
+Serial.println(" - Bright");
+digitalWrite(2, LOW);
+}
+
+else {
+Serial.println(" - Very bright");
+digitalWrite(2, LOW);
+}
+delay(500);}
+int motorPin = 3; // pin that turns on the motor
+int blinkPin = 13; // pin that turns on the LED
+int watertime = 5; // how long it will be watering (in seconds)
+int waittime = 1; // how long to wait between watering (in minutes)
+void setup()
+{
+pinMode(motorPin, OUTPUT); // set Pin 3 to an output
+pinMode(blinkPin, OUTPUT); // set pin 13 to an output
+Serial.begin(9600);
+}
+void loop()
+{
+int moisturePin = analogRead(A0); //read analog value of moisture sensor
+int moisture = ( 100 - ( (moisturePin / 1023.00) * 100 ) ); //convert analog value to
+percentage
+Serial.println(moisture);
+
+if (moisture < 40) { //change the moisture threshold level based on your
+calibration values
+digitalWrite(motorPin, HIGH); // turn on the motor
+digitalWrite(blinkPin, HIGH); // turn on the LED
+delay(watertime * 1000); // multiply by 1000 to translate seconds to
+milliseconds
+}
+else {
+digitalWrite(motorPin, LOW); // turn off the motor
+digitalWrite(blinkPin, LOW); // turn off the LED
+delay(waittime * 60000); // multiply by 60000 to translate minutes to
+milliseconds }
+}
+void setup() {
+Serial.begin(9600); // initialize serial communication
+}
+void loop() {
+int moistureVal = analogRead(A0); // read the input on analog pin 0:
+Serial.println(moistureVal); // print out the analog val
+delay(30);
